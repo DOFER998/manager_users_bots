@@ -1,12 +1,15 @@
 import asyncio
 import logging
 
+from beanie import init_beanie
+
 from src import (
     get_handlers_router,
-    ThrottlingCallback,
-    ThrottlingMessage,
     remove_commands,
     set_commands,
+    SelfBotModal,
+    UserModel,
+    db_client,
     bot,
     dp
 )
@@ -14,10 +17,15 @@ from src import (
 
 async def on_startup():
     dp.include_router(get_handlers_router())
-    dp.message.middleware(ThrottlingMessage())
-    dp.callback_query.outer_middleware(ThrottlingCallback())
-    await set_commands(bot)
     await bot.delete_webhook(drop_pending_updates=True)
+    await init_beanie(
+        database=db_client.Bot,
+        document_models=[
+            SelfBotModal,
+            UserModel
+        ]
+    )
+    await set_commands(bot)
 
     logging.error('Bot started!')
 

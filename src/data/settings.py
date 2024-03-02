@@ -1,11 +1,11 @@
-from typing import Dict
+from typing import Dict, List
 
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    token: str = None
-    rate_limit: float = 0.7
+    token: str = ''
+    database_url: str = ''
 
 
 settings = Settings(
@@ -14,10 +14,30 @@ settings = Settings(
 )
 
 
-class UserCommands(BaseSettings):
+class OwnerCommands(BaseSettings):
     commands: Dict[str, str] = {
         'start': '💼 Главное меню',
+        'add_admin': '👨‍💼✅ Добавить админа',
+        'del_admin': '👨‍💼❌ Удалить админа',
+        'add_self_bot': '🤖➕ Добавить бота',
+        'del_self_bot': '🤖➖ Удалить бота',
+        'list_self_bots': '🤖👥 Список ботов',
+        'mailing': '📧 Рассылка',
+        'reset_commands': '🔁 Перезагрузить команды',
     }
 
 
-user_commands = UserCommands()
+owner_commands = OwnerCommands()
+
+
+class AdminCommands(BaseSettings):
+    commands: Dict[str, str] = {
+        'start': '💼 Главное меню',
+        'add_self_bot': '🤖➕ Добавить бота',
+        'del_self_bot': '🤖➖ Удалить бота',
+        'list_self_bots': '🤖👥 Список ботов',
+        'mailing': '📧 Рассылка',
+    }
+
+
+admin_commands = AdminCommands()

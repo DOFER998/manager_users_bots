@@ -1,8 +1,9 @@
-from .settings import settings, user_commands
+from .settings import settings, owner_commands, admin_commands
 from .loader import storage, bot, dp
 
 __all__ = [
-    'user_commands',
+    'owner_commands',
+    'admin_commands',
     'settings',
     'storage',
     'bot',
