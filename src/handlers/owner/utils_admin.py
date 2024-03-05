@@ -2,8 +2,11 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from src.middlewares import RoleOwnerMsg
+
 router = Router(name='Utils Admin Router')
 router.message.filter(F.chat.type == 'private')
+router.message.middleware(RoleOwnerMsg())
 
 
 @router.message(F.text == '👨‍💼✅ Добавить админа')

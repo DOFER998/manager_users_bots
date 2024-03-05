@@ -5,16 +5,20 @@ from beanie import init_beanie
 
 from src import (
     get_handlers_router,
+    info_controller,
     remove_commands,
     set_commands,
     SelfBotModal,
     UserModel,
+    InfoModel,
     db_client,
     bot,
-    dp
+    app,
+    dp,
 )
 
 
+@app.on_event('startup')
 async def on_startup():
     dp.include_router(get_handlers_router())
     await bot.delete_webhook(drop_pending_updates=True)
@@ -22,14 +26,17 @@ async def on_startup():
         database=db_client.Bot,
         document_models=[
             SelfBotModal,
+            InfoModel,
             UserModel
         ]
     )
     await set_commands(bot)
+    await info_controller.create()
 
     logging.error('Bot started!')
 
 
+@app.on_event('shutdown')
 async def on_shutdown():
     logging.warning('Stopping bot...')
     await remove_commands(bot)
