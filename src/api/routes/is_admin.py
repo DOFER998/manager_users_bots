@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from src.db import users_controller
 from src.db.models import RolesEnum
 
-is_admin_router = APIRouter()
+is_admin_router = APIRouter(prefix='/api')
 
 
 @is_admin_router.get('/is_admin', name='is Admin', description='Check if user is admin')

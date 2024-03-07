@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 from src import info_controller
 
-info_router = APIRouter()
+info_router = APIRouter(prefix='/api')
 
 
 class Info(BaseModel):
