@@ -1,7 +1,6 @@
 import asyncio
 import logging
 
-import uvicorn
 from beanie import init_beanie
 
 from src import (
@@ -21,17 +20,16 @@ from src import (
 
 async def on_startup():
     dp.include_router(get_handlers_router())
+    await bot.delete_webhook(drop_pending_updates=True)
     await init_beanie(
         database=db_client.Bot,
         document_models=[
             SelfBotModal,
             InfoModel,
             UserModel
-        ],
-        multiprocessing_mode=True
+        ]
     )
     await set_commands(bot)
-    await bot.delete_webhook(drop_pending_updates=True)
     await info_controller.create()
 
     logging.error('Bot started!')
