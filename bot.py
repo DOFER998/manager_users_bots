@@ -1,42 +1,42 @@
 import asyncio
 import logging
 
+import uvicorn
 from beanie import init_beanie
 
 from src import (
     get_handlers_router,
     info_controller,
     remove_commands,
+    start_logging,
     set_commands,
     SelfBotModal,
     UserModel,
     InfoModel,
     db_client,
     bot,
-    app,
     dp,
 )
 
 
-@app.on_event('startup')
 async def on_startup():
     dp.include_router(get_handlers_router())
-    await bot.delete_webhook(drop_pending_updates=True)
     await init_beanie(
         database=db_client.Bot,
         document_models=[
             SelfBotModal,
             InfoModel,
             UserModel
-        ]
+        ],
+        multiprocessing_mode=True
     )
     await set_commands(bot)
+    await bot.delete_webhook(drop_pending_updates=True)
     await info_controller.create()
 
     logging.error('Bot started!')
 
 
-@app.on_event('shutdown')
 async def on_shutdown():
     logging.warning('Stopping bot...')
     await remove_commands(bot)
@@ -53,6 +53,7 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        logger: logging.RootLogger = start_logging()
+        asyncio.run(main(), debug=True)
     except (KeyboardInterrupt, SystemExit):
         logging.error('Bot stopped!')

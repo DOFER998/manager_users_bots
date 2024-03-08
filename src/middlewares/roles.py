@@ -52,7 +52,7 @@ class RoleAdminMsg(BaseMiddleware):
 
         if user is not None:
             verification = await users_controller.get_by_id(user.id)
-            if verification.role in (RolesEnum.admin, RolesEnum.owner):
+            if verification.role in [RolesEnum.admin, RolesEnum.owner]:
                 return await handler(event, data)
             else:
                 return await event.delete()
@@ -69,7 +69,7 @@ class RoleAdminCall(BaseMiddleware):
 
         if user is not None:
             verification = await users_controller.get_by_id(user.id)
-            if verification.role in (RolesEnum.admin, RolesEnum.owner):
+            if verification.role in [RolesEnum.admin, RolesEnum.owner]:
                 return await handler(event, data)
             else:
                 return await event.answer(text='❌ Not admin!', show_alert=True)

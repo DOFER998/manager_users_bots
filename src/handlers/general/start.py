@@ -12,10 +12,10 @@ router.message.filter(F.chat.type == 'private')
 
 @router.message(Command(commands=['start']))
 async def cmd_start(msg: Message):
-    await msg.delete()
     await users_controller.create(msg.from_user.id, msg.from_user.username)
     verification = await users_controller.get_by_id(msg.from_user.id)
-    if verification.role in (RolesEnum.admin, RolesEnum.owner):
+    await msg.delete()
+    if verification.role in [RolesEnum.admin, RolesEnum.owner]:
         await msg.answer(
             text=f'<b>Hello</b> {msg.from_user.first_name}👋',
             reply_markup=main_buttons(

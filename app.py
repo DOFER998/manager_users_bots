@@ -1,7 +1,8 @@
+import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from src.api.routes import is_admin_router, info_router
+from src import is_admin_router, info_router
 
 app = FastAPI(title='API')
 app.add_middleware(

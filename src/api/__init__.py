@@ -1,5 +1,6 @@
-from .app import app
+from .routes import is_admin_router, info_router
 
 __all__ = [
-    'app',
+    'is_admin_router',
+    'info_router',
 ]
